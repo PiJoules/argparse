@@ -5,28 +5,31 @@
 #include <map>
 
 namespace argparse {
-    class Type {
-        
-    };
-
     class Namespace {
         private:
-            std::map<std::string, Type> values_;
+            std::map<std::string, std::string> string_values_;
 
         public:
             Namespace(){};
 
-            void set(std::string key, std::string val);
+            void set(const std::string& key, const std::string& val);
+    };
+
+    class Argument {
+        public:
+            Argument(){}
     };
 
     class ArgumentParser {
         private:
             const std::string description_;
+            std::map<std::string, Argument> arguments_;
 
         public:
             ArgumentParser(const std::string& description=""):description_(description){}
 
-            void parse_args(const int argc, char**& argv);
+            Namespace parse_args(const int argc, char**& argv) const;
+            Argument& add_argument(const std::string& arg);
     };
 };
 
