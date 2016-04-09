@@ -3,6 +3,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 
 namespace argparse {
     class Namespace {
@@ -13,7 +14,7 @@ namespace argparse {
             Namespace(){};
 
             void set(const std::string& key, const std::string& val);
-            std::string get(const std::string& key);
+            const std::string& get(const std::string& key);
     };
 
     class Argument {
@@ -25,6 +26,7 @@ namespace argparse {
         private:
             const std::string description_;
             std::map<std::string, Argument> arguments_;
+            std::vector<std::string> positional_;
 
         public:
             ArgumentParser(const std::string& description=""):description_(description){}
