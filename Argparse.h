@@ -13,6 +13,7 @@ namespace argparse {
             Namespace(){};
 
             void set(const std::string& key, const std::string& val);
+            std::string get(const std::string& key);
     };
 
     class Argument {

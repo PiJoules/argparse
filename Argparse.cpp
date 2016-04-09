@@ -5,6 +5,10 @@ namespace argparse {
         string_values_[key] = val;
     }
 
+    std::string Namespace::get(const std::string& key){
+        return string_values_[key];
+    }
+
     Namespace ArgumentParser::parse_args(const int argc, char**& argv) const {
         return Namespace();
     }
