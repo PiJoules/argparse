@@ -36,10 +36,18 @@ namespace argparse {
         for (int i = 1; i < argc; i++){
             std::string val(argv[i]);
 
-            // Check if argument starts with --
-            if (val.find("--") == 0 && !prev_was_opt_flag){
+            // Check if argument starts with -
+            if (val[0] == '-' && !prev_was_opt_flag){
                 // Optional arg flag
-                std::string optional_arg = val.substr(2);
+                std::string optional_arg;
+                if (val[1] == '-'){
+                    // --
+                    optional_arg = val.substr(2);
+                }
+                else {
+                    // -
+                    optional_arg = optional_short_.find(val.substr(1))->second;
+                }
                 
                 // Check if this optional_arg exists
                 if (optional_.find(optional_arg) == optional_.end()){
@@ -66,12 +74,15 @@ namespace argparse {
         return ns;
     }
 
+    /**
+     * Add an argument to the parser and return a reference to it.
+     */
     Argument& ArgumentParser::add_argument(const std::string& arg){
         Argument argument;
 
         // Check if argument starts with --
         if (arg.find("--") == 0){
-            // Adding optional arg
+            // Adding (long) optional arg
             std::string trimmed_arg = arg.substr(2);
             optional_[trimmed_arg] = argument;
             return optional_[trimmed_arg];
@@ -82,6 +93,24 @@ namespace argparse {
             positional_.push_back(arg);
             return arguments_[arg];
         }
+    }
+
+    /**
+     * Add an argument to the parser and return a reference to it
+     * given a short and long version of the argument.
+     */
+    Argument& ArgumentParser::add_argument(const std::string& short_arg, const std::string& long_arg){
+        Argument argument;
+
+        // Adding (long) optional arg
+        std::string trimmed = long_arg.substr(2);
+        optional_[trimmed] = argument;
+
+        // Starts with - (short optional arg)
+        optional_short_[short_arg.substr(1)] = trimmed;
+
+        // Return reference to long
+        return optional_[trimmed];
     }
 }
 

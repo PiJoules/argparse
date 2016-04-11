@@ -26,15 +26,19 @@ namespace argparse {
     class ArgumentParser {
         private:
             const std::string description_;
-            std::map<std::string, Argument> arguments_;  // Positional args
+            std::map<std::string, Argument> arguments_;  // Positional arg values
             std::vector<std::string> positional_;  // Positional arg flags
-            std::map<std::string, Argument> optional_;  // Optional args
+            std::map<std::string, Argument> optional_;  // Optional arg flags => arg values
+            std::map<std::string, std::string> optional_short_;  // Short optional arg flag => long optional arg flag 
 
         public:
             ArgumentParser(const std::string& description=""):description_(description){}
 
             Namespace parse_args(const int argc, char**& argv) const;
+
+            // Add new arguments to the parser
             Argument& add_argument(const std::string& arg);
+            Argument& add_argument(const std::string& short_arg, const std::string& long_arg);
     };
 };
 
